@@ -16,7 +16,7 @@ install:
 before_script:
   - git clone --depth 1 https://github.com/thvnx/gcc.git --branch accurate-limited-range
   - mkdir $GCC_BUILD_DIR
-  - cd $GCC_BUILD_DIR && ../gcc/configure --disable-multilib --disable-bootstrap && make -j8
+  - cd $GCC_BUILD_DIR && ../gcc/configure --disable-multilib --disable-bootstrap --enable-language=c && make -j8
 
 script:
   - echo OK
