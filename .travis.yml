@@ -16,6 +16,8 @@ install:
   - sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev texinfo
 
 before_script:
+  - export PATH=$PATH:$PREFIX
+
   - git clone --depth 1 -b coolidge https://github.com/kalray/gdb-binutils.git
   - git clone --depth 1 -b coolidge https://github.com/kalray/newlib.git
   - git clone --depth 1 -b coolidge https://github.com/kalray/gcc.git
