@@ -3,6 +3,9 @@ language: c
 env:
   global:
     - GCC_BUILD_DIR="build-gcc"
+    - TARGET=k1-elf
+    - PREFIX=$PWD/prefix
+    - PARALLEL_JOBS=-j1
 
 compiler:
   - gcc
@@ -14,9 +17,18 @@ install:
   - sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev
 
 before_script:
-  - git clone --depth 1 https://github.com/thvnx/gcc.git --branch accurate-limited-range
-  - mkdir $GCC_BUILD_DIR
-  - cd $GCC_BUILD_DIR && ../gcc/configure --disable-multilib --disable-bootstrap --enable-languages=c && make -j8
+  - git clone --depth 1 -b coolidge https://github.com/kalray/gdb-binutils.git
+  - git clone --depth 1 -b coolidge https://github.com/kalray/newlib.git
+  - git clone --depth 1 -b coolidge https://github.com/kalray/gcc.git
+
+  - mkdir build-binutils
+  - cd build-binutils
+  - ../gdb-binutils/configure --prefix=$PREFIX --target=$TARGET --disable-initfini-array --disable-gdb --without-gdb --disable-werror --with-expat=yes --with-babeltrace=no --with-bugurl=no
+  - make all $PARALLEL_JOBS
+  - make install
+
+#  - mkdir $GCC_BUILD_DIR
+#  - cd $GCC_BUILD_DIR && ../gcc/configure --disable-multilib --disable-bootstrap --enable-languages=c && make -j8
 
 script:
   - echo OK
